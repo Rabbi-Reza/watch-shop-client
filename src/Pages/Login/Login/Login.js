@@ -23,11 +23,13 @@ const Login = () => {
         loginUser(loginData.email, loginData.password, location, history);
         e.preventDefault();
     }
+
+    
     
     return (
         <Container>
             <Grid container spacing={2}>
-                <Grid item sx={{mt: 8}} xs={12} md={6}>
+                <Grid item sx={{mt: 8}} xs={12} md={12}>
                     <Typography variant="body1" gutterBottom>Login</Typography>
                     <form onSubmit={handleLoginSubmit}>
                         <TextField 
@@ -35,6 +37,7 @@ const Login = () => {
                             id="standard-basic" 
                             label="Your Email" 
                             name="email"
+                            type="email"
                             onChange={handleOnChange}
                             variant="standard" />
                         <TextField 
@@ -49,16 +52,16 @@ const Login = () => {
                         <NavLink 
                             style={{ textDecoration: 'none'}} 
                             to="/register">
-                            <Button variant="text">New User? Please Register</Button>
+                            <Button sx={{ width: '75%', m: 1 }} variant="text">New User? Please Register</Button>
                         </NavLink>
                         {isLoading && <CircularProgress/>}
                         {user?.email && <Alert severity="success">User Created Successfully!!</Alert>}
                         {authError && <Alert severity="error">{authError}</Alert>}
                     </form>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                {/* <Grid item xs={12} md={6}>
                     <img style={{ width: '100%' }} src='{login}' alt="" />
-                </Grid>
+                </Grid> */}
             </Grid>
         </Container>
     );

@@ -37,6 +37,14 @@ const Navigation = () => {
                             <Button color="inherit">Login</Button>
                         </NavLink>
                     }
+                    {
+                        user?.email ?
+                        <div>
+                            <p>{user?.displayName}</p>
+                        </div> 
+                        :
+                        ''
+                    }
                 </Toolbar>
             </AppBar>
         </Box>
