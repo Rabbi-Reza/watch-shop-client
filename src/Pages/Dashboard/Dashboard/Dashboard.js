@@ -27,6 +27,7 @@ import AddProduct from '../AddProduct/AddProduct';
 import ManageProducts from '../ManageProducts/ManageProducts';
 import PrivateRoute from '../../Login/PrivateRoute/PrivateRoute';
 import UpdateProduct from '../UpdateProduct/UpdateProduct';
+import NotFound from '../../Shared/NotFound/NotFound';
 
 const drawerWidth = 200;
 
@@ -166,6 +167,9 @@ function Dashboard(props) {
                     <PrivateRoute path={`${path}/updateProduct/:id`}>
                         <UpdateProduct />
                     </PrivateRoute>
+                    <Route path={`${path}/*`}>
+                        <NotFound />
+                    </Route>
                 </Switch>
             </Box>
         </Box>
