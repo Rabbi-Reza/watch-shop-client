@@ -1,43 +1,41 @@
 import { useEffect, useState } from "react";
 import initializeFirebase from "../Pages/Login/Login/Firebase/firebase.init";
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
-import { Link } from "react-router-dom";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile, signOut, onAuthStateChanged } from "firebase/auth";
 
 // Initialize firebase App
 initializeFirebase();
 
 const useFirebase = () => {
     const [user, setUser] = useState({});
-    // const [name, setName] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [authError, setAuthError] = useState('');
+    const [admin, setAdmin] = useState(false);
 
     const auth = getAuth();
+    const googleProvider = new GoogleAuthProvider();
 
     // Register New User
-    const registerUser = (email, password, userName, history) => {
+    const registerUser = (email, password, name, history) => {
         setIsLoading(true);
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            setUserName(userName);
             setAuthError('');
-            const destination = '/';
-            history.replace(destination);
-            // locationReload();
-            window.location.reload()
+            const newUser = { email, displayName: name };
+            setUser(newUser);
+            // Save user to the database
+            saveUser(email, name, 'POST');
+            // Send name to firebase after creation
+            updateProfile(auth.currentUser, {
+                    displayName: name
+                }).then(() => {
+                }).catch((error) => {
+                });
+            history.replace('/dashboard');
         })
         .catch((error) => {
             setAuthError(error.message);
         })
         .finally(() => setIsLoading(false));
-    }
-
-    // Function for setting or updating profile info
-    const setUserName = (userName) => {
-        updateProfile(auth.currentUser, {
-        displayName: userName
-        })
-        .then(result => {})
     }
 
     // Login existing user
@@ -53,7 +51,21 @@ const useFirebase = () => {
             setAuthError(error.message);
         })
         .finally(() => setIsLoading(false));
+    }
 
+    const signInWithGoogle = (location, history) => {
+        setIsLoading(true);
+        signInWithPopup(auth, googleProvider)
+        .then((result) => {
+            const user = result.user;
+            saveUser(user.email, user.displayName, 'PUT');
+            setAuthError('');
+            const destination = location?.state?.from || '/dashboard';
+            history.replace(destination);
+        }).catch((error) => {
+            setAuthError(error.message);
+        })
+        .finally(() => setIsLoading(false));
     }
 
     // Observer user state
@@ -69,6 +81,13 @@ const useFirebase = () => {
         return () => unsubscribe;
     }, []);
 
+    // Check Admin
+    useEffect(() => {
+        fetch(`http://localhost:5000/users/${user.email}`)
+        .then(res => res.json())
+        .then(data => setAdmin(data.admin))
+    }, [user.email]);
+
     // Log out
     const logout = () => {
         setIsLoading(true);
@@ -80,13 +99,29 @@ const useFirebase = () => {
         .finally(() => setIsLoading(false));
     }
 
+    const saveUser = (email, displayName, method) => {
+        const user = {
+            email, 
+            displayName
+        };
+        fetch('http://localhost:5000/users', {
+            method: method,
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        .then()
+    }
+
     return {
         user,
+        admin,
         isLoading,
         authError,
         registerUser,
-        setUserName,
         loginUser,
+        signInWithGoogle,
         logout
     }
 }

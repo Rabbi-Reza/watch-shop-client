@@ -6,7 +6,7 @@ import useAuth from '../../../hooks/useAuth';
 
 const Login = () => {
     const [loginData, setLoginData] = useState({});
-    const {user, loginUser, isLoading, authError} = useAuth();
+    const {user, loginUser, signInWithGoogle, isLoading, authError } = useAuth();
 
     const location = useLocation();
     const history = useHistory();
@@ -23,9 +23,11 @@ const Login = () => {
         loginUser(loginData.email, loginData.password, location, history);
         e.preventDefault();
     }
+    
+    const handleGoogleSignIn = () => {
+        signInWithGoogle(location, history);
+    }
 
-    
-    
     return (
         <Container>
             <Grid container spacing={2}>
@@ -37,7 +39,6 @@ const Login = () => {
                             id="standard-basic" 
                             label="Your Email" 
                             name="email"
-                            type="email"
                             onChange={handleOnChange}
                             variant="standard" />
                         <TextField 
@@ -52,15 +53,17 @@ const Login = () => {
                         <NavLink 
                             style={{ textDecoration: 'none'}} 
                             to="/register">
-                            <Button sx={{ width: '75%', m: 1 }} variant="text">New User? Please Register</Button>
+                            <Button  sx={{ width: '75%', m: 1 }}variant="text">New User? Please Register</Button>
                         </NavLink>
                         {isLoading && <CircularProgress/>}
                         {user?.email && <Alert severity="success">User Created Successfully!!</Alert>}
                         {authError && <Alert severity="error">{authError}</Alert>}
                     </form>
+                    <p>--------------------------------</p>
+                    <Button sx={{ width: '75%', m: 1 }} onClick={handleGoogleSignIn} variant="contained">Google Sign In</Button>
                 </Grid>
                 {/* <Grid item xs={12} md={6}>
-                    <img style={{ width: '100%' }} src='{login}' alt="" />
+                    <img style={{ width: '100%' }} src={login} alt="" />
                 </Grid> */}
             </Grid>
         </Container>

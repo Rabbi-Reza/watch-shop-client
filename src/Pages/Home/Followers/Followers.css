@@ -1,0 +1,20 @@
+.followers {
+  margin-left: 5%;
+  margin-right: 4%;
+  box-shadow: 0px 0px 15px gray;
+  border-radius: 20px;
+  text-align: center;
+}
+.follower-head {
+  font-size: 40px;
+  color: rgb(43, 0, 78);
+}
+
+.follewer-item {
+  padding-left: 5%;
+  padding-right: 5%;
+  margin-left: 5%;
+  margin-right: 5%;
+  /* box-shadow: 0px 0px 15px rgb(126, 39, 39); */
+  color: gray;
+}
