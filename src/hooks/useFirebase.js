@@ -83,7 +83,7 @@ const useFirebase = () => {
 
     // Check Admin
     useEffect(() => {
-        fetch(`http://localhost:5000/users/${user.email}`)
+        fetch(`https://shrouded-dusk-10588.herokuapp.com/users/${user.email}`)
         .then(res => res.json())
         .then(data => setAdmin(data.admin))
     }, [user.email]);
@@ -104,7 +104,7 @@ const useFirebase = () => {
             email, 
             displayName
         };
-        fetch('http://localhost:5000/users', {
+        fetch('https://shrouded-dusk-10588.herokuapp.com/users', {
             method: method,
             headers: {
                 'content-type': 'application/json'

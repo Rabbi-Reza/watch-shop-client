@@ -23,7 +23,7 @@ const Header = () => {
                                             admin && <Nav.Link as={Link} className="items" to="/dashboard/manageAllOrders">Dash Board</Nav.Link>
                                         }
                                         {
-                                            !admin && <Nav.Link as={Link} className="items" to="/dashboard/manageOrders">Dash Board</Nav.Link>
+                                            !admin && <Nav.Link as={Link} className="items" to="/dashboard/myOrders">Dash Board</Nav.Link>
                                         }
                                         <Button onClick={logout} className="me-3" variant="light">Logout</Button>
                                     </>
